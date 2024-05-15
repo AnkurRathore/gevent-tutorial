@@ -167,11 +167,11 @@ def task(pid):
     print('Task %s done' % pid)
 
 def synchronous():
-    for i in xrange(10):
+    for i in range(10):
         task(i)
 
 def asynchronous():
-    threads = [gevent.spawn(task, i) for i in xrange(10)]
+    threads = [gevent.spawn(task, i) for i in range(10)]
     gevent.joinall(threads)
 
 print('Synchronous:')
@@ -212,7 +212,7 @@ requests, depending on the load on the remote server at the time of the request.
 gevent.monkey.patch_socket()
 
 import gevent
-import urllib2
+from urllib.request import urlopen
 import simplejson as json
 
 def fetch(pid):
@@ -262,10 +262,10 @@ def echo(i):
 from multiprocessing.pool import Pool
 
 p = Pool(10)
-run1 = [a for a in p.imap_unordered(echo, xrange(10))]
-run2 = [a for a in p.imap_unordered(echo, xrange(10))]
-run3 = [a for a in p.imap_unordered(echo, xrange(10))]
-run4 = [a for a in p.imap_unordered(echo, xrange(10))]
+run1 = [a for a in p.imap_unordered(echo, range(10))]
+run2 = [a for a in p.imap_unordered(echo, range(10))]
+run3 = [a for a in p.imap_unordered(echo, range(10))]
+run4 = [a for a in p.imap_unordered(echo, range(10))]
 
 print(run1 == run2 == run3 == run4)
 
@@ -274,10 +274,10 @@ print(run1 == run2 == run3 == run4)
 from gevent.pool import Pool
 
 p = Pool(10)
-run1 = [a for a in p.imap_unordered(echo, xrange(10))]
-run2 = [a for a in p.imap_unordered(echo, xrange(10))]
-run3 = [a for a in p.imap_unordered(echo, xrange(10))]
-run4 = [a for a in p.imap_unordered(echo, xrange(10))]
+run1 = [a for a in p.imap_unordered(echo, range(10))]
+run2 = [a for a in p.imap_unordered(echo, range(10))]
+run3 = [a for a in p.imap_unordered(echo, range(10))]
+run4 = [a for a in p.imap_unordered(echo, range(10))]
 
 print(run1 == run2 == run3 == run4)
 </code>
@@ -692,7 +692,7 @@ def worker(n):
     print('Quitting time!')
 
 def boss():
-    for i in xrange(1,25):
+    for i in range(1,25):
         tasks.put_nowait(i)
 
 gevent.spawn(boss).join()
@@ -744,12 +744,12 @@ def boss():
     free since the maxsize of the task queue is 3.
     """
 
-    for i in xrange(1,10):
+    for i in range(1,10):
         print('Assigned work %s in iteration 1' % (i))
         tasks.put(i)
     print('Assigned all work in iteration 1')
 
-    for i in xrange(10,20):
+    for i in range(10,20):
         print('Assigned work %s in iteration 2' % (i))
         tasks.put(i)
     print('Assigned all work in iteration 2')
@@ -774,7 +774,7 @@ import gevent
 from gevent.pool import Group
 
 def talk(msg):
-    for i in xrange(3):
+    for i in range(3):
         print(msg)
 
 g1 = gevent.spawn(talk, 'bar')
@@ -808,7 +808,7 @@ def hello_from(n):
     print('Size of group %s' % len(group))
     print('Hello from Greenlet %s' % id(getcurrent()))
 
-group.map(hello_from, xrange(3))
+group.map(hello_from, range(3))
 
 
 def intensive(n):
@@ -818,13 +818,13 @@ def intensive(n):
 print('Ordered')
 
 ogroup = Group()
-for i in ogroup.imap(intensive, xrange(3)):
+for i in ogroup.imap(intensive, range(3)):
     print(i)
 
 print('Unordered')
 
 igroup = Group()
-for i in igroup.imap_unordered(intensive, xrange(3)):
+for i in igroup.imap_unordered(intensive, range(3)):
     print(i)
 
 ]]]
@@ -844,7 +844,7 @@ pool = Pool(2)
 def hello_from(n):
     print('Size of pool %s' % len(pool))
 
-pool.map(hello_from, xrange(3))
+pool.map(hello_from, range(3))
 ]]]
 [[[end]]]
 
@@ -908,8 +908,8 @@ def worker2(n):
     print('Worker %i released semaphore' % n)
 
 pool = Pool()
-pool.map(worker1, xrange(0,2))
-pool.map(worker2, xrange(3,6))
+pool.map(worker1, range(0,2))
+pool.map(worker2, range(3,6))
 ]]]
 [[[end]]]
 
@@ -1054,17 +1054,17 @@ a, b = Pipe()
 c, d = Pipe()
 
 def relay():
-    for i in xrange(10):
+    for i in range(10):
         msg = b.recv()
         c.send(msg + " in " + str(i))
 
 def put_msg():
-    for i in xrange(10):
+    for i in range(10):
         wait_write(a.fileno())
         a.send('hi')
 
 def get_msg():
-    for i in xrange(10):
+    for i in range(10):
         wait_read(d.fileno())
         print(d.recv())
 
